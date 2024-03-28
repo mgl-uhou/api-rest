@@ -1,70 +1,30 @@
-import connection from "../database/connection.js";
+import queries from "../database/connection.js";
 
 class selecao_repository {
   // CRUD
   create(selecao) {
     const sql = "INSERT INTO selecoes SET ?;";
-    return new Promise((resolve, reject) => {
-      connection.query(sql, selecao, (error, result) => {
-        if (error) return reject("Couldn't register.");
-
-        // fazer o parse dos resultados
-        const row = JSON.parse(JSON.stringify(result));
-        return resolve(row);
-      });
-    });
+    return queries(sql, selecao, "Couldn't register.");
   }
 
   findAll() {
     const sql = "SELECT * FROM selecoes;";
-    return new Promise((resolve, reject) => {
-      connection.query(sql, (error, result) => {
-        if (error) return reject("Couldn't be found.");
-
-        // fazer o parse dos resultados
-        const row = JSON.parse(JSON.stringify(result));
-        return resolve(row);
-      });
-    });
+    return queries(sql, "Couldn't be found.");
   }
 
   findById(id) {
     const sql = "SELECT * FROM selecoes WHERE id=?;";
-    return new Promise((resolve, reject) => {
-      connection.query(sql, id, (error, result) => {
-        if (error) return reject("Couldn't be found.");
-
-        // fazer o parse dos resultados
-        const row = JSON.parse(JSON.stringify(result));
-        return resolve(row);
-      });
-    });
+    return queries(sql, id, "Couldn't be found.");
   }
 
   update(selecao, id) {
     const sql = "UPDATE selecoes SET ? WHERE id=?;";
-    return new Promise((resolve, reject) => {
-      connection.query(sql, [selecao, id], (error, result) => {
-        if (error) return reject("Couldn't be found.");
-
-        // fazer o parse dos resultados
-        const row = JSON.parse(JSON.stringify(result));
-        return resolve(row);
-      });
-    });
+    return queries(sql, [selecao, id], "Couldn't be updated.");
   }
 
   delete(id) {
     const sql = "DELETE FROM selecoes WHERE id=?;";
-    return new Promise((resolve, reject) => {
-      connection.query(sql, id, (error, result) => {
-        if (error) return reject("Couldn't be found.");
-
-        // fazer o parse dos resultados
-        const row = JSON.parse(JSON.stringify(result));
-        return resolve(row);
-      });
-    });
+    return queries(sql, id, "Couldn't be deleted.");
   }
 }
 
