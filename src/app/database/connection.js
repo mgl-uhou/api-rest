@@ -6,11 +6,33 @@ const connection = mysql.createConnection({
   host: process.env.mysql_host || 'localhost',
   port: process.env.mysql_port || 3306,
   user: process.env.mysql_user || 'root',
-  password: process.env.mysql_pass || '',
-  database: process.env.mysql_db || "bd_copa",
+  password: process.env.mysql_pass || ''
 });
 
 connection.connect();
+
+const callback = (error) => {
+  if(error) throw new Error(error.message);
+}
+try{
+  connection.query(
+    `create database if not exists ${process.env.mysql_db}
+    default character set utf8mb3
+    default collate utf8mb3_unicode_ci;`, callback);
+
+  connection.query(`use ${process.env.mysql_db};`, callback);
+
+  connection.query(
+    `create table if not exists selecoes(
+      id int primary key auto_increment,
+      selecao varchar(25) not null,
+      grupo char(1) not null
+    );`, callback);
+
+  console.log("Base de dados e tabela criadas.");
+}catch(error){
+  console.log(error.message);
+}
 
 /**
  * Executa um código sql com ou sem valores
